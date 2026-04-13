@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التدريب والتطوير فى درعه</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Cairo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #fff0f5; /* Light pink background fallback */
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            color: #333;
+        }
+
+        /* Animated Background Blobs */
+        .blob-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffffff 0%, #fce7f3 100%);
+        }
+        .blob {
+            position: absolute;
+            filter: blur(90px);
+            opacity: 0.7;
+            border-radius: 50%;
+            animation: float 10s infinite alternate ease-in-out;
+        }
+        .blob-1 {
+            top: -10%; left: -10%; width: 50vw; height: 50vw; background: #fbcfe8; 
+            animation-delay: 0s;
+        }
+        .blob-2 {
+            bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: #f9a8d4;
+            animation-duration: 15s; animation-direction: alternate-reverse;
+        }
+        .blob-3 {
+            top: 40%; left: 40%; width: 40vw; height: 40vw; background: #fdf2f8;
+            animation-duration: 12s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 50px) scale(1.1); }
+        }
+
+        /* Glassmorphism Styles */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 8px 32px 0 rgba(236, 72, 153, 0.15);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 15px 30px rgba(236, 72, 153, 0.25);
+            border-color: #f472b6; /* pink-400 */
+        }
+
+        .glass-card-small {
+            padding: 1rem;
+            border-radius: 1rem;
+        }
+
+        .glass-card-large {
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+        }
+
+        .icon-box {
+            background: linear-gradient(135deg, #f472b6, #db2777);
+            color: white;
+            box-shadow: 0 4px 10px rgba(219, 39, 119, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover .icon-box {
+            transform: rotate(10deg) scale(1.1);
+        }
+
+        /* Inputs & Buttons */
+        .glass-input {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+        .glass-input:focus {
+            outline: none;
+            border-color: #f472b6;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.3);
+        }
+
+        .toggle-btn {
+            background: linear-gradient(135deg, #ffffff, #fce7f3);
+            border: 1px solid #fbcfe8;
+            color: #be185d;
+            transition: all 0.3s;
+        }
+        .toggle-btn:hover {
+            background: #fdf2f8;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Smooth Hide/Show Transition */
+        #suggestions-wrapper {
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out, margin 0.5s ease;
+            max-height: 2000px;
+            opacity: 1;
+            overflow: hidden;
+        }
+        #suggestions-wrapper.hidden-section {
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Animated Background -->
+    <div class="blob-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-10 max-w-7xl">
+        
+        <!-- Header & Logos -->
+        <header class="flex flex-col items-center justify-center mb-12 space-y-6">
+            <div class="flex items-center justify-center space-x-6 space-x-reverse">
+                <img src="Deraah.png.png" alt="Deraah Logo" class="h-20 md:h-28 object-contain drop-shadow-md" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display:none;" class="text-3xl font-bold text-pink-600 bg-white px-4 py-2 rounded-xl shadow">درعه</div>
+                
+                <img src="Deraah2.png alt="D Logo" class="h-16 md:h-20 object-contain drop-shadow-md" onerror="this.style.display='none';">
+            </div>
+            
+            <div class="glass-panel px-8 py-4 rounded-3xl text-center border-t border-l border-white/80">
+                <h1 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-pink-400 drop-shadow-sm">
+                    التدريب والتطوير فى درعه
+                </h1>
+            </div>
+        </header>
+
+        <!-- Controls (Search & Toggle) -->
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 glass-panel p-4 rounded-2xl">
+            <!-- Search Bar -->
+            <div class="relative w-full md:w-1/2">
+                <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-search text-pink-400"></i>
+                </div>
+                <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="ابحث عن صفحة أو أداة..." 
+                       class="glass-input w-full py-3 pr-12 pl-4 rounded-xl text-gray-700 placeholder-pink-300 font-semibold focus:ring-2 focus:ring-pink-300">
+            </div>
+
+            <!-- Toggle Button -->
+            <button id="toggleBtn" onclick="toggleSuggestions()" class="toggle-btn w-full md:w-auto px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-sm">
+                <span id="toggleText">إخفاء المقترحات</span>
+                <i id="toggleIcon" class="fa-solid fa-eye-slash"></i>
+            </button>
+        </div>
+
+        <!-- Main Links Section -->
+        <div id="main-section" class="mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="mainCardsContainer">
+                
+                <!-- Link 1 -->
+                <a href="https://deraah-company.github.io/Deraah-Survey/" target="_blank" class="glass-card glass-card-large link-item">
+                    <div class="w-14 h-14 rounded-2xl icon-box flex items-center justify-center text-2xl ml-4 shrink-0">
+                        <i class="fa-solid fa-poll-h"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Deraah Academy Survey</h2>
+                        <p class="text-sm text-pink-600 mt-1 font-semibold">استبيان الأكاديمية</p>
+                    </div>
+                </a>
+
+                <!-- Link 2 -->
+                <a href="https://deraah-company.github.io/Teleprompter/" target="_blank" class="glass-card glass-card-large link-item">
+                    <div class="w-14 h-14 rounded-2xl icon-box flex items-center justify-center text-2xl ml-4 shrink-0">
+                        <i class="fa-solid fa-video"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Teleprompter For Videos</h2>
+                        <p class="text-sm text-pink-600 mt-1 font-semibold">القارئ الآلي للفيديوهات</p>
+                    </div>
+                </a>
+
+                <!-- Link 3 -->
+                <a href="https://deraah-company.github.io/academy/" target="_blank" class="glass-card glass-card-large link-item">
+                    <div class="w-14 h-14 rounded-2xl icon-box flex items-center justify-center text-2xl ml-4 shrink-0">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">تحليل التقدم واكتمال الدورات</h2>
+                        <p class="text-sm text-pink-600 mt-1 font-semibold">متابعة الأداء</p>
+                    </div>
+                </a>
+
+                <!-- Link 4 -->
+                <a href="https://deraah-company.github.io/Exam/" target="_blank" class="glass-card glass-card-large link-item">
+                    <div class="w-14 h-14 rounded-2xl icon-box flex items-center justify-center text-2xl ml-4 shrink-0">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">تحليل درجه النجاح</h2>
+                        <p class="text-sm text-pink-600 mt-1 font-semibold">Post Assessment</p>
+                    </div>
+                </a>
+
+                <!-- Link 5 -->
+                <a href="https://deraah-company.github.io/Store-PDF/" target="_blank" class="glass-card glass-card-large link-item">
+                    <div class="w-14 h-14 rounded-2xl icon-box flex items-center justify-center text-2xl ml-4 shrink-0">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">تحويل الصور ل PDF</h2>
+                        <p class="text-sm text-pink-600 mt-1 font-semibold">أداة تحويل الملفات</p>
+                    </div>
+                </a>
+
+                <!-- Link 6 -->
+                <a href="https://deraah-company.github.io/Deraah-roulette/" target="_blank" class="glass-card glass-card-large link-item">
+                    <div class="w-14 h-14 rounded-2xl icon-box flex items-center justify-center text-2xl ml-4 shrink-0">
+                        <i class="fa-solid fa-dharmachakra"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">عجلة الحظ</h2>
+                        <p class="text-sm text-pink-600 mt-1 font-semibold">Deraah-Roulette</p>
+                    </div>
+                </a>
+
+                <!-- Link 7 -->
+                <a href="https://deraah-company.github.io/table-voco/" target="_blank" class="glass-card glass-card-large link-item">
+                    <div class="w-14 h-14 rounded-2xl icon-box flex items-center justify-center text-2xl ml-4 shrink-0">
+                        <i class="fa-solid fa-table-list"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Voco Event Table</h2>
+                        <p class="text-sm text-pink-600 mt-1 font-semibold">جدول الفعاليات</p>
+                    </div>
+                </a>
+
+                <!-- Link 8 -->
+                <a href="https://deraah-company.github.io/who-wins-the-million-deraah/" target="_blank" class="glass-card glass-card-large link-item">
+                    <div class="w-14 h-14 rounded-2xl icon-box flex items-center justify-center text-2xl ml-4 shrink-0">
+                        <i class="fa-solid fa-sack-dollar"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">من سيربح المليون</h2>
+                        <p class="text-sm text-pink-600 mt-1 font-semibold">لعبة تفاعلية</p>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- Suggestions Section -->
+        <div id="suggestions-wrapper" class="mt-16">
+            <div class="flex items-center mb-6 px-2">
+                <h3 class="text-2xl font-bold text-pink-600 flex items-center gap-3">
+                    <i class="fa-solid fa-lightbulb text-pink-400"></i>
+                    مقترحات
+                </h3>
+                <div class="flex-grow h-px bg-gradient-to-l from-transparent via-pink-200 to-transparent mr-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="suggestionsCardsContainer">
+                
+                <!-- Sug 1 -->
+                <a href="https://deraah-company.github.io/Deraah-Engagement/index.html" target="_blank" class="glass-card glass-card-small link-item">
+                    <div class="w-10 h-10 rounded-xl icon-box flex items-center justify-center text-lg ml-3 shrink-0">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-md font-bold text-gray-800">Deraah Engagement Hub</h2>
+                    </div>
+                </a>
+
+                <!-- Sug 2 -->
+                <a href="https://deraah-company.github.io/Deraah-Falcons/" target="_blank" class="glass-card glass-card-small link-item">
+                    <div class="w-10 h-10 rounded-xl icon-box flex items-center justify-center text-lg ml-3 shrink-0">
+                        <i class="fa-solid fa-spray-can"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-md font-bold text-gray-800">اختر العطر المناسب لك</h2>
+                    </div>
+                </a>
+
+                <!-- Sug 3 -->
+                <a href="https://deraah-company.github.io/Ramadan-Deraah/" target="_blank" class="glass-card glass-card-small link-item">
+                    <div class="w-10 h-10 rounded-xl icon-box flex items-center justify-center text-lg ml-3 shrink-0">
+                        <i class="fa-solid fa-moon"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-md font-bold text-gray-800">Ramadan Activity</h2>
+                    </div>
+                </a>
+
+                <!-- Sug 4 -->
+                <a href="https://deraah-company.github.io/Dr-Deraah/" target="_blank" class="glass-card glass-card-small link-item">
+                    <div class="w-10 h-10 rounded-xl icon-box flex items-center justify-center text-lg ml-3 shrink-0">
+                        <i class="fa-solid fa-user-doctor"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-md font-bold text-gray-800">Dr Deraah</h2>
+                        <p class="text-xs text-pink-600 font-semibold">للاصناف والموظفين</p>
+                    </div>
+                </a>
+
+                <!-- Sug 5 -->
+                <a href="https://deraah-company.github.io/Doctor-Deraah/" target="_blank" class="glass-card glass-card-small link-item">
+                    <div class="w-10 h-10 rounded-xl icon-box flex items-center justify-center text-lg ml-3 shrink-0">
+                        <i class="fa-solid fa-stethoscope"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-md font-bold text-gray-800">Dr Deraah 2</h2>
+                        <p class="text-xs text-pink-600 font-semibold">للاصناف والموظفين</p>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        // Search functionality
+        function filterCards() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.link-item');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                // Toggle display based on search match
+                if (text.includes(input)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Toggle Suggestions functionality
+        let isSuggestionsVisible = true;
+        
+        function toggleSuggestions() {
+            const wrapper = document.getElementById('suggestions-wrapper');
+            const toggleText = document.getElementById('toggleText');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            isSuggestionsVisible = !isSuggestionsVisible;
+            
+            if (isSuggestionsVisible) {
+                wrapper.classList.remove('hidden-section');
+                toggleText.textContent = 'إخفاء المقترحات';
+                toggleIcon.className = 'fa-solid fa-eye-slash';
+            } else {
+                wrapper.classList.add('hidden-section');
+                toggleText.textContent = 'إظهار المقترحات';
+                toggleIcon.className = 'fa-solid fa-eye';
+            }
+        }
+    </script>
+</body>
+</html>
